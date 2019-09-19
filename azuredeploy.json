@@ -1,79 +1,79 @@
 {
     "parameters": {
         "databaseName": {
-            "type": "string"
+            "value": "database1"
         },
         "administratorLogin": {
-            "type": "string"
+            "value": "student"
         },
         "administratorLoginPassword": {
-            "type": "securestring"
+            "value": null
         },
         "mysqLocation": {
-            "type": "string"
+            "value": "Central US"
         },
         "serverName": {
-            "type": "string"
+            "value": "serverdb111"
         },
         "skuCapacity": {
-            "type": "int"
+            "value": 4
         },
         "skuFamily": {
-            "type": "string"
-        },
-        "storageMB": {
-            "type": "int"
-        },
-        "backupRetentionDays": {
-            "type": "int"
-        },
-        "geoRedundantBackup": {
-            "type": "string"
+            "value": "Gen5"
         },
         "skuName": {
-            "type": "string"
+            "value": "GP_Gen5_4"
         },
         "skuSizeMB": {
-            "type": "int"
+            "value": 102400
         },
         "skuTier": {
-            "type": "string"
+            "value": "GeneralPurpose"
+        },
+        "storageMB": {
+            "value": 102400
+        },
+        "backupRetentionDays": {
+            "value": 7
+        },
+        "geoRedundantBackup": {
+            "value": "Disabled"
         },
         "version": {
-            "type": "string"
-        },
-        "charset": {
-            "type": "string"
+            "value": "5.7"
         },
         "collation": {
-            "type": "string"
+            "value": "utf8_general_ci"
+        },
+        "charset": {
+            "value": "utf8"
         },
         "name": {
-            "type": "string"
+            "value": "mahadugas"
         },
         "hostingPlanName": {
-            "type": "string"
+            "value": "ServicePlancc2a20d0-abf0"
         },
         "hostingEnvironment": {
-            "type": "string"
+            "value": ""
         },
         "location": {
-            "type": "string"
+            "value": "Central US"
         },
         "sku": {
-            "type": "string"
-        },
-        "skuCode": {
-            "type": "string"
+            "value": "Standard"
         },
         "workerSize": {
-            "type": "string"
+            "value": "0"
         },
         "serverFarmResourceGroup": {
-            "type": "string"
+            "value": "sentia"
+        },
+        "skuCode": {
+            "value": "S1"
         },
         "subscriptionId": {
-            "type": "string"
+            "value": "02b61957-4a28-418b-a2d9-12d7f81a0844"
         }
     },
     "resources": [
