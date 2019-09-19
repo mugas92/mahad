@@ -1,95 +1,223 @@
 {
-  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {
-    "siteName": {
-      "type": "string"
-    },
-    "hostingPlanName": {
-      "type": "string"
-    },
-    "siteLocation": {
-      "type": "string"
-    },
-    "sku": {
-      "type": "string",
-      "allowedValues": [
-        "F1",
-        "B1",
-        "S1"
-      ],
-      "defaultValue": "F1"
-    },
-    "repoUrl": {
-      "type": "string"
-    },
-    "branch": {
-      "type": "string",
-      "defaultValue": "master"
-    }
-  },
-  "resources": [
-    {
-      "apiVersion": "2015-08-01",
-      "name": "[parameters('hostingPlanName')]",
-      "type": "Microsoft.Web/serverFarms",
-      "location": "[parameters('siteLocation')]",
-      "properties": {
-        
-      },
-      "sku": {
-        "name": "[parameters('sku')]",
-        "capacity": 1
-      }
-    },
-    {
-      "apiVersion": "2015-08-01",
-      "name": "[parameters('siteName')]",
-      "type": "Microsoft.Web/Sites",
-      "location": "[parameters('siteLocation')]",
-      "dependsOn": [
-        "[concat('Microsoft.Web/serverFarms/', parameters('hostingPlanName'))]"
-      ],
-      "properties": {
-        "name": "[parameters('siteName')]",
-        "serverFarmId": "[parameters('hostingPlanName')]",
-        "siteConfig": {
-          "localMySqlEnabled": true,
-           "appSettings": [
-            { "name": "WEBSITE_MYSQL_ENABLED", "value": "1" },
-            { "name": "WEBSITE_MYSQL_GENERAL_LOG", "value": "0" },
-            { "name": "WEBSITE_MYSQL_SLOW_QUERY_LOG", "value": "0" },
-            { "name": "WEBSITE_MYSQL_ARGUMENTS", "value": "--max_allowed_packet=16M" }
-          ]
+    "parameters": {
+        "databaseName": {
+            "type": "string"
+        },
+        "administratorLogin": {
+            "type": "string"
+        },
+        "administratorLoginPassword": {
+            "type": "securestring"
+        },
+        "mysqLocation": {
+            "type": "string"
+        },
+        "serverName": {
+            "type": "string"
+        },
+        "skuCapacity": {
+            "type": "int"
+        },
+        "skuFamily": {
+            "type": "string"
+        },
+        "storageMB": {
+            "type": "int"
+        },
+        "backupRetentionDays": {
+            "type": "int"
+        },
+        "geoRedundantBackup": {
+            "type": "string"
+        },
+        "skuName": {
+            "type": "string"
+        },
+        "skuSizeMB": {
+            "type": "int"
+        },
+        "skuTier": {
+            "type": "string"
+        },
+        "version": {
+            "type": "string"
+        },
+        "charset": {
+            "type": "string"
+        },
+        "collation": {
+            "type": "string"
+        },
+        "name": {
+            "type": "string"
+        },
+        "hostingPlanName": {
+            "type": "string"
+        },
+        "hostingEnvironment": {
+            "type": "string"
+        },
+        "location": {
+            "type": "string"
+        },
+        "sku": {
+            "type": "string"
+        },
+        "skuCode": {
+            "type": "string"
+        },
+        "workerSize": {
+            "type": "string"
+        },
+        "serverFarmResourceGroup": {
+            "type": "string"
+        },
+        "subscriptionId": {
+            "type": "string"
         }
-      },
-      "resources": [
+    },
+    "resources": [
         {
-          "apiVersion": "2015-08-01",
-          "name": "web",
-          "type": "sourcecontrols",
-          "dependsOn": [
-            "[resourceId('Microsoft.Web/Sites', parameters('siteName'))]"
-          ],
-          "properties": {
-            "RepoUrl": "[parameters('repoUrl')]",
-            "branch": "[parameters('branch')]",
-            "IsManualIntegration": true
-          }
+            "name": "[parameters('name')]",
+            "type": "Microsoft.Web/sites",
+            "properties": {
+                "siteConfig": {
+                    "appSettings": [
+                        {
+                            "name": "PHPMYADMIN_EXTENSION_VERSION",
+                            "value": "latest"
+                        },
+                        {
+                            "name": "WEBSITE_DYNAMIC_CACHE",
+                            "value": "0"
+                        },
+                        {
+                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                            "value": "[reference('microsoft.insights/components/mahadugas', '2015-05-01').InstrumentationKey]"
+                        },
+                        {
+                            "name": "XDT_MicrosoftApplicationInsights_Mode",
+                            "value": "default"
+                        },
+                        {
+                            "name": "ApplicationInsightsAgent_EXTENSION_VERSION",
+                            "value": "~2"
+                        }
+                    ],
+                    "phpVersion": "7.0",
+                    "connectionStrings": [
+                        {
+                            "name": "defaultConnection",
+                            "ConnectionString": "[concat('Database=', parameters('databaseName'), ';Data Source=', parameters('serverName') ,'.mysql.database.azure.com;User Id=',parameters('administratorLogin'),'@',parameters('serverName') ,';Password=',parameters('administratorLoginPassword'))]",
+                            "type": "MySQL"
+                        }
+                    ]
+                },
+                "name": "[parameters('name')]",
+                "serverFarmId": "[concat('/subscriptions/', parameters('subscriptionId'),'/resourcegroups/', parameters('serverFarmResourceGroup'), '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]",
+                "hostingEnvironment": "[parameters('hostingEnvironment')]"
+            },
+            "resources": [
+                {
+                    "apiVersion": "2016-03-01",
+                    "name": "web",
+                    "type": "sourcecontrols",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/Sites', parameters('name'))]"
+                    ],
+                    "properties": {
+                        "RepoUrl": "https://github.com/azureappserviceoss/wordpress-azure",
+                        "branch": "master",
+                        "IsManualIntegration": true
+                    }
+                }
+            ],
+            "dependsOn": [
+                "[concat('Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]",
+                "microsoft.insights/components/mahadugas"
+            ],
+            "apiVersion": "2016-03-01",
+            "location": "[parameters('location')]"
         },
         {
-          "apiVersion": "2014-06-01",
-          "name": "web",
-          "type": "config",
-          "dependsOn": [
-            "[concat('Microsoft.Web/sites/', parameters('siteName'))]"
-          ],
-          "properties": {
-           
-            "phpVersion": "7.2"
-          }
+            "apiVersion": "2016-09-01",
+            "name": "[parameters('hostingPlanName')]",
+            "type": "Microsoft.Web/serverfarms",
+            "location": "[parameters('location')]",
+            "properties": {
+                "name": "[parameters('hostingPlanName')]",
+                "workerSizeId": "[parameters('workerSize')]",
+                "numberOfWorkers": "1",
+                "hostingEnvironment": "[parameters('hostingEnvironment')]"
+            },
+            "sku": {
+                "Tier": "[parameters('sku')]",
+                "Name": "[parameters('skuCode')]"
+            }
+        },
+        {
+            "apiVersion": "2015-05-01",
+            "name": "mahadugas",
+            "type": "microsoft.insights/components",
+            "location": "centralus",
+            "properties": {
+                "ApplicationId": "[parameters('name')]",
+                "Request_Source": "IbizaWebAppExtensionCreate"
+            }
+        },
+        {
+            "name": "[parameters('serverName')]",
+            "type": "Microsoft.DBforMySQL/servers",
+            "apiVersion": "2017-12-01-preview",
+            "location": "[parameters('mysqLocation')]",
+            "properties": {
+                "version": "[parameters('version')]",
+                "administratorLogin": "[parameters('administratorLogin')]",
+                "administratorLoginPassword": "[parameters('administratorLoginPassword')]",
+                "storageProfile": {
+                    "storageMB": "[parameters('skuSizeMB')]",
+                    "backupRetentionDays": "[parameters('backupRetentionDays')]",
+                    "geoRedundantBackup": "[parameters('geoRedundantBackup')]"
+                },
+                "sslEnforcement": "Disabled"
+            },
+            "sku": {
+                "name": "[parameters('skuName')]",
+                "tier": "[parameters('skuTier')]",
+                "capacity": "[parameters('skuCapacity')]",
+                "size": "[parameters('skuSizeMB')]",
+                "family": "[parameters('skuFamily')]"
+            },
+            "resources": [
+                {
+                    "name": "AllowAll",
+                    "type": "firewallrules",
+                    "apiVersion": "2017-12-01-preview",
+                    "properties": {
+                        "startIpAddress": "0.0.0.0",
+                        "endIpAddress": "255.255.255.255"
+                    },
+                    "location": "[parameters('mysqLocation')]",
+                    "dependsOn": [
+                        "[concat('Microsoft.DBforMySQL/servers/', parameters('serverName'), '/databases/' , parameters('databaseName'))]",
+                        "[concat('Microsoft.DBforMySQL/servers/', parameters('serverName'))]"
+                    ]
+                },
+                {
+                    "name": "[parameters('databaseName')]",
+                    "type": "databases",
+                    "apiVersion": "2017-12-01-preview",
+                    "properties": {
+                        "charset": "[parameters('charset')]",
+                        "collation": "[parameters('collation')]"
+                    },
+                    "dependsOn": [
+                        "[concat('Microsoft.DBforMySQL/servers/', parameters('serverName'))]"
+                    ]
+                }
+            ]
         }
-      ]
-    }
-  ]
+    ],
+    "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0"
 }
