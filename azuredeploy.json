@@ -1,5 +1,10 @@
 {
     "parameters": {
+
+        "hostingPlanName": {
+            "type": "string"
+			
+		},
         "databaseName": {
             "type": "string"
 			
@@ -78,9 +83,7 @@
         "name": {
             "type": "string"
 			
-        },
-        "hostingPlanName": {
-            "type": "string"
+        
 		
 			
         },
