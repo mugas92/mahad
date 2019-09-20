@@ -81,7 +81,7 @@
         },
         "hostingPlanName": {
             "type": "string",
-			"defaultValue": "testmahadugas"
+		
 			
         },
         "hostingEnvironment": {
