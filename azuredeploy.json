@@ -80,7 +80,7 @@
 			
         },
         "hostingPlanName": {
-            "type": "string",
+            "type": "string"
 		
 			
         },
