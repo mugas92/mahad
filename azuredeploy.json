@@ -111,10 +111,6 @@
         "skuCode": {
             "type": "string",
 			"defaultValue": "S1"
-        },
-        "subscriptionId": {
-            "type": "string",
-			"defaultValue": "2b61957-4a28-418b-a2d9-12d7f81a0844"
         }
     },
     "resources": [
