@@ -1,7 +1,7 @@
 {
     "parameters": {
 
-        "hostingPlanName": {
+        "appserviceplan": {
             "type": "string"
 			
 		},
@@ -159,7 +159,7 @@
                     ]
                 },
                 "name": "[parameters('name')]",
-                "serverFarmId": "[concat('/subscriptions/', parameters('subscriptionId'),'/resourcegroups/', parameters('serverFarmResourceGroup'), '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]",
+                "serverFarmId": "[concat('/subscriptions/', parameters('subscriptionId'),'/resourcegroups/', parameters('serverFarmResourceGroup'), '/providers/Microsoft.Web/serverfarms/', parameters('appserviceplan'))]",
                 "hostingEnvironment": "[parameters('hostingEnvironment')]"
             },
             "resources": [
@@ -178,7 +178,7 @@
                 }
             ],
             "dependsOn": [
-                "[concat('Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]",
+                "[concat('Microsoft.Web/serverfarms/', parameters('appserviceplan'))]",
                 "microsoft.insights/components/mahadugas"
             ],
             "apiVersion": "2016-03-01",
@@ -186,11 +186,11 @@
         },
         {
             "apiVersion": "2016-09-01",
-            "name": "[parameters('hostingPlanName')]",
+            "name": "[parameters('appserviceplan')]",
             "type": "Microsoft.Web/serverfarms",
             "location": "[parameters('location')]",
             "properties": {
-                "name": "[parameters('hostingPlanName')]",
+                "name": "[parameters('appserviceplan')]",
                 "workerSizeId": "[parameters('workerSize')]",
                 "numberOfWorkers": "1",
                 "hostingEnvironment": "[parameters('hostingEnvironment')]"
