@@ -81,7 +81,7 @@
         },
         "hostingPlanName": {
             "type": "string",
-			"defaultValue": "ServicePlan0846428b-b30e"
+	   
 			
         },
         "hostingEnvironment": {
