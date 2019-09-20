@@ -196,12 +196,8 @@
                 "hostingEnvironment": "[parameters('hostingEnvironment')]"
             },
             "sku": {
-                "name": "[parameters('sku')]",
-               "name": "S1",
-                "tier": "Standard",
-                "size": "S1",
-                "family": "S",
-                "capacity": 5 
+                "Tier": "[parameters('sku')]",
+                "Name": "[parameters('skuCode')]"
             }
         },
         {
